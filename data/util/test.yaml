@@ -4,14 +4,14 @@ val: /content/recy_test/images/train/
 # Classes
 nc: 10 # number of classes
 names: [
-    'Refrigerator',
-    'washing machinec',
+    '냉장고',
+    '세탁기',
     'TV',
-    'washing machinec',
-    'jar',
-    'wardrobe',
-    'chair',
-    'bicyclec',
-    'sofa',
-    'water purifier'
+    '에어컨',
+    '항아리',
+    '장롱',
+    '의자',
+    '자전거 ',
+    '소파',
+    '정수기'
   ] # class names
