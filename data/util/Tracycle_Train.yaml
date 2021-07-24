@@ -1,0 +1,41 @@
+train: /Project_Tr_Data/dataset/images/train/
+val: /Project_Tr_Data/dataset/images/val/
+
+# Classes
+nc: 34 # number of classes
+names: [
+    'Frame'
+    'Bicycle',
+    'Flowerpot'
+    'Jar',
+    'Refrigerator',
+    'Washing machine',
+    'TV',
+    'Air conditioner',
+    'Electric water purifier',
+    'Computer',
+    'Electric rice cooker',
+    'Mobile phone terminal',
+    'Electric fan',
+    'Mixer',
+    'Humidifier',
+    'Printers',
+    'Iron',
+    'Vacuum cleaner',
+    'Air purifier',
+    'Wardrobe',
+    'Chair',
+    'Sofa',
+    'Dressing table',
+    'Desk',
+    'Storage closet',
+    'Vinyl',
+    'Styrofoam',
+    'Glass bottle',
+    'Clothing',
+    'Paper',
+    'Can',
+    'Pet bottle',
+    'Plastic',
+    'Light'
+ ] # class names
