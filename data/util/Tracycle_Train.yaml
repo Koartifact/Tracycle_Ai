@@ -1,5 +1,5 @@
-train: /Project_Tr_Data/dataset/images/train/
-val: /Project_Tr_Data/dataset/images/val/
+train: /content/gdrive/MyDrive/Project_Data/dataset/images/train/
+val: /content/gdrive/MyDrive/Project_Data/dataset/images/val/
 
 # Classes
 nc: 34 # number of classes
