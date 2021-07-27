@@ -1,5 +1,5 @@
-train: /content/gdrive/MyDrive/Project_Data/dataset/images/train/0-10
-val: /content/gdrive/MyDrive/Project_Data/dataset/images/val/0-10
+train: /content/gdrive/MyDrive/Project_Data/dataset/images/train/
+val: /content/gdrive/MyDrive/Project_Data/dataset/images/val/
 
 
 # Classes
