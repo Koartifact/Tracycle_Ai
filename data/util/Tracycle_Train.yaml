@@ -5,9 +5,9 @@ val: /content/gdrive/MyDrive/Project_Data/dataset/images/val/
 # Classes
 nc: 34 # number of classes
 names: [
-    'Frame'
+    'Frame',
     'Bicycle',
-    'Flowerpot'
+    'Flowerpot',
     'Jar',
     'Refrigerator',
     'Washing machine',
