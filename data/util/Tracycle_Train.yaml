@@ -1,5 +1,9 @@
-train: /content/gdrive/MyDrive/Project_Data/dataset/images/train
-val: /content/gdrive/MyDrive/Project_Data/dataset/images/val
+# train: /content/gdrive/MyDrive/Project_Data/data1/images/train
+# val: /content/gdrive/MyDrive/Project_Data/data1/images/val
+
+train: /content/gdrive/MyDrive/Project_Data/data2/images/train
+val: /content/gdrive/MyDrive/Project_Data/data2/images/val
+
 
 
 
