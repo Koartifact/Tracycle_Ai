@@ -3,7 +3,7 @@ val: /content/dataset/images/val/
 
 
 # Classes
-nc: 34 # number of classes
+nc: 30 # number of classes
 names: [
     'Frame',
     'Bicycle',
