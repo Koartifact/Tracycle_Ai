@@ -1,5 +1,5 @@
-train: /content/re2/images/train/
-val: /content/re2/images/val/
+train: /content/dataset/images/train/
+val: /content/dataset/images/val/
 
 
 # Classes
@@ -30,13 +30,9 @@ names: [
     'Dressing table',
     'Desk',
     'Storage closet',
-    'Vinyl',
-    'Styrofoam',
-    'Glass bottle',
-    'Clothing',
-    'Paper',
-    'Can',
-    'Pet bottle',
-    'Plastic',
-    'Light'
+    'Dining table',
+    'Golf club',
+    'Chest of drawers',
+    'Microwave',
+    'Frying pan'
  ] # class names
