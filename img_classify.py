@@ -1,7 +1,11 @@
 import os
+import tempfile
 import time
-from watchdog.observers import Observer
+
 from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
+
 
 class Target:
     watchDir = 'd:\SoPool\AiProject\img_handle'
@@ -28,19 +32,24 @@ class Handler(FileSystemEventHandler):
     #FileSystemEventHandler 클래스를 상속받음.
     #아래 핸들러들을 오버라이드 함
 
-    #파일, 디렉터리가 move 되거나 rename 되면 실행
-    def on_moved(self, event):
-        print(event)
+    def on_created(self, foldername):       # 파일, 디렉터리가 생성되면 실행
 
-    def on_created(self, event):  # 파일, 디렉터리가 생성되면 실행
-        print(event)
+        path = folder = foldername                   # 파일이 업로드 되면 아이디 별로 폴더 생성해서
+        os.makedirs(path, exist_ok=True)
 
-    def on_deleted(self, event):  # 파일, 디렉터리가 삭제되면 실행
-        print(event)
-
-    def on_modified(self, event):  # 파일, 디렉터리가 수정되면 실행
-        print(event)
+        with tempfile.TemporaryDirectory() as tempDir:
+            if os.path.exists(tempDir):
+                print('temp dir: ', tempDir)
 
 
-w = Target()
-w.run()
+    # def on_moved(self, event):      #파일, 디렉터리가 move 되거나 rename 되면 실행
+    #     print(event)
+
+    # def on_deleted(self, event):    # 파일, 디렉터리가 삭제되면 실행
+    #     print(event)
+
+    # def on_modified(self, event):   # 파일, 디렉터리가 수정되면 실행
+    #     print(event)
+
+# w = Target()
+# w.run()
