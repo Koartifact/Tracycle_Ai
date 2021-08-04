@@ -4,7 +4,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class Target:
-    watchDir = os.getcwd()
+    watchDir = 'd:\SoPool\AiProject\img_handle'
     #watchDir에 감시하려는 디렉토리를 명시한다.
 
     def __init__(self):
@@ -42,6 +42,5 @@ class Handler(FileSystemEventHandler):
         print(event)
 
 
-if __name__ == '__main__':  # 본 파일에서 실행될 때만 실행되도록 함
-    w = Target()
-    w.run()
+w = Target()
+w.run()
