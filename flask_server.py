@@ -1,11 +1,6 @@
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
-from img_classify import Target
-
-#플라스크 서버 시작할때 폴더 감지도 같이 작동
-w = Target() 
-w.run()
-
+from img_classify import Target, Handler
 
 app = Flask(__name__)
 CORS(app)
