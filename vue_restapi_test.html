@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div id="app">
+      <br />
+      <center>
+        <button type="button" class="btn btn-primary" v-on:click="test_get">
+          GET
+        </button>
+        <button type="button" class="btn btn-secondary" v-on:click="test_post">
+          POST
+        </button>
+        <button type="button" class="btn btn-success" v-on:click="test_put">
+          PUT
+        </button>
+        <button type="button" class="btn btn-danger" v-on:click="test_delete">
+          DELETE
+        </button>
+      </center>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Vue Start -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        methods: {
+          test_get: () => {
+            axios("http://localhost:8082/test", {
+              method: "get",
+              params: {
+                email: "test@test.com",
+              },
+            })
+              .then((response) => {
+                console.log(response.data["status"]);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+          test_post: () => {
+            axios("http://localhost:8082/test", {
+              method: "post",
+              data: {
+                email: "test@test.com",
+              },
+            })
+              .then((response) => {
+                console.log(response.data["status"]);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+          test_put: () => {
+            axios("http://localhost:8082/test", {
+              method: "put",
+              params: {
+                email: "test@test.com",
+              },
+            })
+              .then((response) => {
+                console.log(response.data["status"]);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+          test_delete: () => {
+            axios("http://localhost:8082/test", {
+              method: "delete",
+              params: {
+                email: "test@test.com",
+              },
+            })
+              .then((response) => {
+                console.log(response.data["status"]);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
