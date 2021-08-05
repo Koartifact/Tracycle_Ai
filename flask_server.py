@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 CORS(app)
 
-
+#구글 드라이브에서 가중치 파일 받는 것 추가 
 google_path = 'https://drive.google.com/uc?id='
 file_id = '1SpZl2eB4zELOFmNBkObP1DAmTdmOWPZP'
 output_name = 'best.pt'
@@ -39,8 +39,8 @@ def predict():
         results.render()  # updates results.imgs with boxes and labels
         for img in results.imgs:
             img_base64 = Image.fromarray(img)
-            img_base64.save("static/image0.jpg", format="JPEG")
-        return redirect("static/image0.jpg")
+            img_base64.save("static/result0.jpg", format="JPEG")
+        return redirect("static/result0.jpg")
 
     return render_template("index.html")
 
