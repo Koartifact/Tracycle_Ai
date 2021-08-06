@@ -18,32 +18,35 @@ file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
 output_name = 'best.pt'
 gdown.download(google_path+file_id, output_name,quiet=False)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/service", methods=["GET", "POST"])
 def predict():
-    print("되나?")
-    if request.method == "POST":
-        if "file" not in request.files:
+    print("지역구 :", equest.form.get('areaId'))
+    print("사용자 :", request.form.get('userId'))
+    if request.method == 'POST':
+        if "mainFile" not in request.files:
             return redirect(request.url)
-        file = request.files["file"]
-        if not file:
-            return
+        file = request.files["mainFile"]
+        print(file)
+        return "ok"
+        # if not file:
+        #     return
 
-        img_bytes = file.read()
-        img = Image.open(io.BytesIO(img_bytes))
-        results = model(img, size=640)
+        # img_bytes = file.read()
+        # img = Image.open(io.BytesIO(img_bytes))
+        # results = model(img, size=640)
 
-        # for debugging
-        data = results.pandas().xyxy[0].to_json(orient="records")
-        print(data)
+        # # for debugging
+        # data = results.pandas().xyxy[0].to_json(orient="records")
+        # print(data)
 
-        results.render()  # updates results.imgs with boxes and labels
-        for img in results.imgs: 
-            img_base64 = Image.fromarray(img)
-            img_base64.save("static/result0.jpg", format="JPEG")
-            img_url="static/result0.jpg"
-        return str(img_url)+str(data)
-
-    return render_template("index.html")
+        # results.render()  # updates results.imgs with boxes and labels
+        # for img in results.imgs: 
+        #     img_base64 = Image.fromarray(img)
+        #     img_base64.save("static/result0.jpg", format="JPEG")
+        #     img_url="static/result0.jpg"
+        # return str(img_url)+str(data)
+    return "no"
+    #return render_template("index.html")
 
 
 if __name__ == "__main__":
