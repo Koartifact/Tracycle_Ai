@@ -21,6 +21,7 @@ gdown.download(google_path+file_id, output_name,quiet=False)
 
 @app.route("/", methods=["GET", "POST"])
 def predict():
+    print("되나?")
     if request.method == "POST":
         if "file" not in request.files:
             return redirect(request.url)
@@ -48,7 +49,7 @@ def predict():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Flask app exposing yolov5 models")
-    parser.add_argument("--port", default=5000, type=int, help="port number")
+    parser.add_argument("--port", default=8085, type=int, help="port number")
     args = parser.parse_args()
 
     model = torch.hub.load(
