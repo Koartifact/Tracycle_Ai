@@ -1,11 +1,9 @@
 import gdown
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import torch
 from PIL import Image
-import os
 import io
 import argparse
-from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 
 
@@ -15,7 +13,8 @@ CORS(app)
 
 #구글 드라이브에서 가중치 파일 받는 것 추가 
 google_path = 'https://drive.google.com/uc?id='
-file_id = '1SpZl2eB4zELOFmNBkObP1DAmTdmOWPZP'
+file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
+
 output_name = 'best.pt'
 gdown.download(google_path+file_id, output_name,quiet=False)
 
@@ -34,14 +33,15 @@ def predict():
         results = model(img, size=640)
 
         # for debugging
-        # data = results.pandas().xyxy[0].to_json(orient="records")
-        # return data
+        data = results.pandas().xyxy[0].to_json(orient="records")
+        print(data)
 
         results.render()  # updates results.imgs with boxes and labels
-        for img in results.imgs:
+        for img in results.imgs: 
             img_base64 = Image.fromarray(img)
             img_base64.save("static/result0.jpg", format="JPEG")
-        return redirect("static/result0.jpg")
+            img_url="static/result0.jpg"
+        return str(img_url)+str(data)
 
     return render_template("index.html")
 
