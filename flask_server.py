@@ -5,7 +5,8 @@ from PIL import Image
 import io
 import argparse
 from flask_cors import CORS
-
+import pymysql
+import dbconfig
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
@@ -18,16 +19,49 @@ file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
 output_name = 'best.pt'
 gdown.download(google_path+file_id, output_name,quiet=False)
 
+#
+def get_result(dbname, areaId, categoryId):
+    print(type(areaId))
+    print(type(categoryId))
+    if dbname != dbconfig.DATABASE_CONFIG['dbname']:
+        raise ValueError("Could not find DB with given name")
+    conn = pymysql.connect(host=dbconfig.DATABASE_CONFIG['host'],
+                           user=dbconfig.DATABASE_CONFIG['user'],
+                           password=dbconfig.DATABASE_CONFIG['password'],
+                           db=dbconfig.DATABASE_CONFIG['dbname'])
+    cursor = conn.cursor()
+    sql = '''
+    SELECT r.price, r.standard, r.description, c.category_name, a.area_name, a.url, a.telephone
+    FROM result AS r
+    JOIN category AS c ON c.category_id=r.category_id
+    JOIN area AS a ON a.area_id=r.area_id
+    WHERE a.area_id = %s and c.category_id = %s;
+    '''
+    cursor.execute(sql, (areaId, categoryId))
+    result = cursor.fetchall()
+    conn.close()
+    return result
+
+    
+
 @app.route("/service", methods=["GET", "POST"])
 def predict():
-    print("지역구 :", equest.form.get('areaId'))
+    print("지역구 :", request.form.get('areaId'))
     print("사용자 :", request.form.get('userId'))
     if request.method == 'POST':
+        areaId = int(request.form.get('areaId'))
         if "mainFile" not in request.files:
             return redirect(request.url)
         file = request.files["mainFile"]
         print(file)
-        return "ok"
+        
+        # 진철님 카테고리 받아오는 코드 들어갈 곳
+        categoryId = 3 # 테스트용으로 3이라고 함
+
+        result = get_result('tracycle', areaId, categoryId)
+        print(result, "???")
+        return jsonify(result)
+        
         # if not file:
         #     return
 

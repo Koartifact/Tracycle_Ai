@@ -14,3 +14,6 @@ def conn_mysqldb():
     if not MYSQL_CONN.open:
         MYSQL_CONN.ping(reconnect=True)
     return MYSQL_CONN
+
+
+
