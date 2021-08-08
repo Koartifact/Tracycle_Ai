@@ -7,19 +7,19 @@ import argparse
 from flask_cors import CORS
 import pymysql
 import dbconfig
+import json
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 CORS(app)
 
-#구글 드라이브에서 가중치 파일 받는 것 추가 
-google_path = 'https://drive.google.com/uc?id='
-file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
+###구글 드라이브에서 가중치 파일 받는 것 추가 테스트 땐 한번 받고 주석처리
+# google_path = 'https://drive.google.com/uc?id='
+# file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
+# output_name = 'best.pt'
+# gdown.download(google_path+file_id, output_name,quiet=False)
+####
 
-output_name = 'best.pt'
-gdown.download(google_path+file_id, output_name,quiet=False)
-
-#
 def get_result(dbname, areaId, categoryId):
     print(type(areaId))
     print(type(categoryId))
@@ -43,7 +43,6 @@ def get_result(dbname, areaId, categoryId):
     return result
 
     
-
 @app.route("/service", methods=["GET", "POST"])
 def predict():
     print("지역구 :", request.form.get('areaId'))
@@ -54,33 +53,39 @@ def predict():
             return redirect(request.url)
         file = request.files["mainFile"]
         print(file)
+    
+    #########################################################################
+     # yolo에서 보내주는 값 json 으로 받음 기본설정이라 안건드림
+        img_bytes = file.read()
+        img = Image.open(io.BytesIO(img_bytes))
+        results = model(img, size=640)
+
+        results.render()  # updates results.imgs with boxes and labels
+        for img in results.imgs:
+            img_base64 = Image.fromarray(img)
+            img_base64.save("static/result0.jpg", format="JPEG")
+
+        data = results.pandas().xyxy[0].to_json(orient="records")
+    ########################################################################  
+
+              
+        # 파싱을 위해 리스트로 바꾸어서 파싱
+        list_data = json.loads(data)
+        # 클래스 명이 리스트로 저장 (detect 된 종류가 여려개면 여러개 순서로)
+        class_name=[]
+        for x in list_data:
+            class_name.append(x['class'])
+        print(class_name)
         
-        # 진철님 카테고리 받아오는 코드 들어갈 곳
-        categoryId = 3 # 테스트용으로 3이라고 함
-
-        result = get_result('tracycle', areaId, categoryId)
-        print(result, "???")
-        return jsonify(result)
+       
+        # db 찾아서 출력 이걸 어떻게 보내남
+        for c in class_name:
+            categoryId = c
+            print(categoryId)
+            infos = get_result('tracycle', areaId, categoryId)
+            print(infos)
         
-        # if not file:
-        #     return
-
-        # img_bytes = file.read()
-        # img = Image.open(io.BytesIO(img_bytes))
-        # results = model(img, size=640)
-
-        # # for debugging
-        # data = results.pandas().xyxy[0].to_json(orient="records")
-        # print(data)
-
-        # results.render()  # updates results.imgs with boxes and labels
-        # for img in results.imgs: 
-        #     img_base64 = Image.fromarray(img)
-        #     img_base64.save("static/result0.jpg", format="JPEG")
-        #     img_url="static/result0.jpg"
-        # return str(img_url)+str(data)
     return "no"
-    #return render_template("index.html")
 
 
 if __name__ == "__main__":
