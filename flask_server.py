@@ -78,14 +78,14 @@ def predict():
         print(class_name)
         
        
-        # db 찾아서 출력 이걸 어떻게 보내남
+        # db 찾아서 출력 어떻게 띄우지
         for c in class_name:
             categoryId = c
             print(categoryId)
             infos = get_result('tracycle', areaId, categoryId)
             print(infos)
         
-    return "no"
+    return jsonify(infos)
 
 
 if __name__ == "__main__":
