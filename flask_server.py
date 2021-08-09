@@ -68,28 +68,34 @@ def predict():
         data = results.pandas().xyxy[0].to_json(orient="records")
     ########################################################################  
 
+        info_list = list()
               
         # 파싱을 위해 리스트로 바꾸어서 파싱
         list_data = json.loads(data)
         # 클래스 명이 리스트로 저장 (detect 된 종류가 여려개면 여러개 순서로)
-        class_name=[]
+        class_id=set()
         for x in list_data:
-            class_name.append(x['class'])
-        print(class_name)
-        
-        if not class_name:
+            class_id.add(x['class'])
+        class_id = list(class_id)
+        print()
+        print(class_id)
+        print()
+        if not class_id:
             print("Can't find object")
             infos = "Can't find object"
 
         else:
          # db 찾아서 출력 어떻게 띄우지
-            for c in class_name:
+            for c in class_id:
                 categoryId = c
                 print(categoryId)
                 infos = get_result('tracycle', areaId, categoryId)
+                for info in infos:
+                    info_list.append(info)
                 print(infos)
         
-    return jsonify(infos)
+    print("!!", info_list)
+    return jsonify(info_list)
 
 
 if __name__ == "__main__":
