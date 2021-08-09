@@ -18,7 +18,8 @@ CORS(app)
 # file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
 # output_name = 'best.pt'
 # gdown.download(google_path+file_id, output_name,quiet=False)
-####
+####e
+
 
 def get_result(dbname, areaId, categoryId):
     print(type(areaId))
@@ -42,7 +43,7 @@ def get_result(dbname, areaId, categoryId):
     conn.close()
     return result
 
-    
+
 @app.route("/service", methods=["GET", "POST"])
 def predict():
     print("지역구 :", request.form.get('areaId'))
@@ -53,7 +54,7 @@ def predict():
             return redirect(request.url)
         file = request.files["mainFile"]
         print(file)
-    
+
     #########################################################################
      # yolo에서 보내주는 값 json 으로 받음 기본설정이라 안건드림
         img_bytes = file.read()
@@ -66,7 +67,8 @@ def predict():
             img_base64.save("static/result0.jpg", format="JPEG")
 
         data = results.pandas().xyxy[0].to_json(orient="records")
-    ########################################################################  
+    ########################################################################
+
 
         info_list = list()
               
@@ -77,9 +79,7 @@ def predict():
         for x in list_data:
             class_id.add(x['class'])
         class_id = list(class_id)
-        print()
-        print(class_id)
-        print()
+        
         if not class_id:
             print("Can't find object")
             infos = "Can't find object"
@@ -93,9 +93,18 @@ def predict():
                 for info in infos:
                     info_list.append(info)
                 print(infos)
-        
-    print("!!", info_list)
+
     return jsonify(info_list)
+
+
+
+@app.route("/img", methods=["GET", "POST"])
+def show():
+    if request.method == 'GET':
+        print('GET')
+        link = "static/result0.jpg"
+        print(link)
+    return jsonify(link)
 
 
 if __name__ == "__main__":
@@ -104,8 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--port", default=8085, type=int, help="port number")
     args = parser.parse_args()
 
-    model = torch.hub.load(
-        'ultralytics/yolov5', 'custom', path='best.pt'
-    ).autoshape()  # force_reload = recache latest code
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt').autoshape()  # force_reload = recache latest code
     model.eval()
-    app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
+    # debug=True causes Restarting with stat
+    app.run(host="0.0.0.0", port=args.port)
