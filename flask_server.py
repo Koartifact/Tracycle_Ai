@@ -8,17 +8,62 @@ from flask_cors import CORS
 import pymysql
 import dbconfig
 import json
+############  파일 감시 추가
+import os
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
-app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
-CORS(app)
 
-###구글 드라이브에서 가중치 파일 받는 것 추가 테스트 땐 한번 받고 주석처리
+
+#### 구글 드라이브에서 가중치 파일 받는 것 추가 테스트 땐 한번 받고나면 주석처리
 # google_path = 'https://drive.google.com/uc?id='
 # file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
 # output_name = 'best.pt'
 # gdown.download(google_path+file_id, output_name,quiet=False)
 ####
+
+
+#### 파일 감시부분 ###########################################
+class Target:
+    watchDir = os.getcwd()
+    #watchDir에 감시하려는 디렉토리를 명시한다.
+
+    def __init__(self):
+        self.observer = Observer()  # observer객체를 만듦
+
+    def run(self):
+        event_handler = Handler()
+        self.observer.schedule(event_handler, self.watchDir,
+                               recursive=True)
+        self.observer.start()
+        try:
+            while True:
+                time.sleep(1)
+        except:
+            self.observer.stop()
+            print("Error")
+            self.observer.join()
+
+class Handler(FileSystemEventHandler):
+    #FileSystemEventHandler 클래스를 상속받음.
+    #아래 핸들러들을 오버라이드 함
+
+    def on_created(self, event): #파일, 디렉터리가 생성되면 실행
+        생성되면 result0 을 result1로 바꿈 바꿀때 덮어씌움 그럼 0은 다시 만들기 전까지 없어지는 것 만들기
+
+# def on_modified(self, event): #파일, 디렉터리가 수정되면 실행
+
+    
+#############################################################
+
+
+
+#### flask 서버 시작 #####################
+app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+CORS(app)
+
 
 def get_result(dbname, areaId, categoryId):
     print(type(areaId))
@@ -42,7 +87,7 @@ def get_result(dbname, areaId, categoryId):
     conn.close()
     return result
 
-    
+
 @app.route("/service", methods=["GET", "POST"])
 def predict():
     print("지역구 :", request.form.get('areaId'))
@@ -53,8 +98,8 @@ def predict():
             return redirect(request.url)
         file = request.files["mainFile"]
         print(file)
-    
-    #########################################################################
+
+    ########################################################################
      # yolo에서 보내주는 값 json 으로 받음 기본설정이라 안건드림
         img_bytes = file.read()
         img = Image.open(io.BytesIO(img_bytes))
@@ -66,30 +111,38 @@ def predict():
             img_base64.save("static/result0.jpg", format="JPEG")
 
         data = results.pandas().xyxy[0].to_json(orient="records")
-    ########################################################################  
+    ########################################################################
 
-              
         # 파싱을 위해 리스트로 바꾸어서 파싱
         list_data = json.loads(data)
         # 클래스 명이 리스트로 저장 (detect 된 종류가 여려개면 여러개 순서로)
-        class_name=[]
+        class_name = []
         for x in list_data:
             class_name.append(x['class'])
         print(class_name)
-        
+
         if not class_name:
             print("Can't find object")
             infos = "Can't find object"
 
         else:
-         # db 찾아서 출력 어떻게 띄우지
+         
             for c in class_name:
                 categoryId = c
                 print(categoryId)
                 infos = get_result('tracycle', areaId, categoryId)
                 print(infos)
-        
+
     return jsonify(infos)
+
+################################################
+@app.route("/img", methods=["GET", "POST"])
+def show():
+    if request.method == 'GET':
+        print('GET')
+        link = "static/result1.jpg" # result0이 안만들어지거나 없으면 1이 안생김
+    return jsonify(link)
+################################################ 
 
 
 if __name__ == "__main__":
@@ -98,8 +151,10 @@ if __name__ == "__main__":
     parser.add_argument("--port", default=8085, type=int, help="port number")
     args = parser.parse_args()
 
-    model = torch.hub.load(
-        'ultralytics/yolov5', 'custom', path='best.pt'
-    ).autoshape()  # force_reload = recache latest code
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt').autoshape()  # force_reload = recache latest code
     model.eval()
-    app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
+    # debug=True causes Restarting with stat
+    app.run(host="0.0.0.0", port=args.port)
+
+    w = Target("static/")
+    w.run()
