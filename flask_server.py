@@ -92,14 +92,13 @@ def predict():
     return jsonify(info_list)
 
 
-
-@app.route("/img", methods=["GET", "POST"])
-def show():
-    if request.method == 'GET':
-        print('GET')
-        link = "static/result0.jpg"
-        print(link)
-    return jsonify(link)
+# @app.route("/img", methods=["GET", "POST"])
+# def show():
+#     if request.method == 'GET':
+#         print('GET')
+#         link = "static/result0.jpg"
+#         print(link)
+#     return jsonify(link)
 
 
 if __name__ == "__main__":
