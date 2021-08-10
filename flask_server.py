@@ -22,8 +22,7 @@ CORS(app)
 
 
 def get_result(dbname, areaId, categoryId):
-    print(type(areaId))
-    print(type(categoryId))
+    
     if dbname != dbconfig.DATABASE_CONFIG['dbname']:
         raise ValueError("Could not find DB with given name")
     conn = pymysql.connect(host=dbconfig.DATABASE_CONFIG['host'],
@@ -46,14 +45,13 @@ def get_result(dbname, areaId, categoryId):
 
 @app.route("/service", methods=["GET", "POST"])
 def predict():
-    print("지역구 :", request.form.get('areaId'))
-    print("사용자 :", request.form.get('userId'))
+
+    userId = request.form.get('userId')
     if request.method == 'POST':
         areaId = int(request.form.get('areaId'))
         if "mainFile" not in request.files:
             return redirect(request.url)
         file = request.files["mainFile"]
-        print(file)
 
     #########################################################################
      # yolo에서 보내주는 값 json 으로 받음 기본설정이라 안건드림
@@ -64,11 +62,10 @@ def predict():
         results.render()  # updates results.imgs with boxes and labels
         for img in results.imgs:
             img_base64 = Image.fromarray(img)
-            img_base64.save("static/result0.jpg", format="JPEG")
+            img_base64.save("static/"+userId+".jpg", format="JPEG")
 
         data = results.pandas().xyxy[0].to_json(orient="records")
     ########################################################################
-
 
         info_list = list()
               
@@ -88,11 +85,9 @@ def predict():
          # db 찾아서 출력 어떻게 띄우지
             for c in class_id:
                 categoryId = c
-                print(categoryId)
                 infos = get_result('tracycle', areaId, categoryId)
                 for info in infos:
                     info_list.append(info)
-                print(infos)
 
     return jsonify(info_list)
 
