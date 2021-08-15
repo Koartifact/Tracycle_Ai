@@ -13,12 +13,12 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 CORS(app)
 
-###구글 드라이브에서 가중치 파일 받는 것 추가 테스트 땐 한번 받고 주석처리
-# google_path = 'https://drive.google.com/uc?id='
-# file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
-# output_name = 'best.pt'
-# gdown.download(google_path+file_id, output_name,quiet=False)
-####e
+###구글 드라이브에서 가중치 파일 받는 것 추가 테스트 땐 한번받고 주석처리
+google_path = 'https://drive.google.com/uc?id='
+file_id = '1-bEBxnujEU-R-p29-QM8eFFeRICwjYey'
+output_name = 'best.pt'
+gdown.download(google_path+file_id, output_name,quiet=False)
+####
 
 
 def get_result(dbname, areaId, categoryId):
@@ -54,7 +54,7 @@ def predict():
         file = request.files["mainFile"]
 
     #########################################################################
-     # yolo에서 보내주는 값 json 으로 받음 기본설정이라 안건드림
+     # yolo에서 보내주는 값 json 으로 받음 기본설정
         img_bytes = file.read()
         img = Image.open(io.BytesIO(img_bytes))
         results = model(img, size=640)
@@ -82,7 +82,7 @@ def predict():
             infos = "Can't find object"
 
         else:
-         # db 찾아서 출력 어떻게 띄우지
+        
             for c in class_id:
                 categoryId = c
                 infos = get_result('tracycle', areaId, categoryId)
@@ -90,15 +90,6 @@ def predict():
                     info_list.append(info)
 
     return jsonify(info_list)
-
-
-# @app.route("/img", methods=["GET", "POST"])
-# def show():
-#     if request.method == 'GET':
-#         print('GET')
-#         link = "static/result0.jpg"
-#         print(link)
-#     return jsonify(link)
 
 
 if __name__ == "__main__":
