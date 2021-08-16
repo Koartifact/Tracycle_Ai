@@ -1,5 +1,5 @@
 DATABASE_CONFIG = {
-    'host' : 'localhost',
+    'host' : '127.0.0.1',
     'dbname' : 'tracycle',
     'user' : 'root',
     'password' : '1234',

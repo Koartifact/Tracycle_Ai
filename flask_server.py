@@ -47,6 +47,7 @@ def get_result(dbname, areaId, categoryId):
 def predict():
 
     userId = request.form.get('userId')
+    print(userId)
     if request.method == 'POST':
         areaId = int(request.form.get('areaId'))
         if "mainFile" not in request.files:
@@ -82,7 +83,6 @@ def predict():
             infos = "Can't find object"
 
         else:
-         # db 찾아서 출력 어떻게 띄우지
             for c in class_id:
                 categoryId = c
                 infos = get_result('tracycle', areaId, categoryId)
