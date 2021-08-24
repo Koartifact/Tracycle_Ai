@@ -70,7 +70,7 @@ return jsonify(info_list)
 - 분석결과 라벨링된 카테고리가 여러개일 경우 해당 결과를 전부 받아 리스트에 저장후 json으로 리턴
 
 
-##### etc : if __name__ == "__main__":
+##### Etc. :  if __name__ == "__main__":
 
 - 시작 시 플라스크와 yolo 구동
 - 플라스트 설정 (port, host 조건)
@@ -117,12 +117,12 @@ drive.mount('/content/gdrive')
 - Train 수행 부분
 - img 600 : 이미지 사이즈 640에서 오류가 잦아서 600으로 다운하여 학습
 - batch 8 : 16 설정시 보다 좋은 결과를 가져와 8로 설정 
-- epochs : 120 
+- epochs : 130 
 - weights : yolov5m. 처음에는 s모델로 시작하였으나 좀더 좋은 성능을 위해 m 모델로 변경학습
 - data : yaml 파일위치 설정. (라벨링 정보와 파일 경로)
 
 ```
-!cd /content/yolov5; python train.py --img 600 --batch 8 --epochs 200 --data /content/gdrive/MyDrive/Project_Data/Tracycle_Train.yaml --weights yolov5m.pt \
+!cd /content/yolov5; python train.py --img 600 --batch 8 --epochs 130 --data /content/gdrive/MyDrive/Project_Data/Tracycle_Train.yaml --weights yolov5m.pt \
                                      --project=/mydrive/Project_Data --name summary --exist-ok 
 
 ```
